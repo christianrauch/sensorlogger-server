@@ -19,7 +19,7 @@ class SensorDatabase {
 
         void addSetting(const std::string name);
 
-        void addSensor(const std::string name, const std::string id,
+        void addSensor(const std::string name, const std::string id, const std::string type,
                        const std::string unit, const std::string setting,
                        const unsigned int pos_x, const unsigned int pos_y);
 

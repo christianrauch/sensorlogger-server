@@ -16,16 +16,19 @@ void SensorDatabase::init() {
     const std::string sql_create_settings =
         "CREATE TABLE settings (name TEXT PRIMARY KEY UNIQUE);";
     const std::string sql_create_sensors =
-        "CREATE TABLE sensors (name TEXT PRIMARY KEY UNIQUE, id TEXT, unit TEXT, setting TEXT, posx INT, posy INT);";
+        "CREATE TABLE sensors (name TEXT PRIMARY KEY UNIQUE, id TEXT, type TEXT, unit TEXT, setting TEXT, posx INT, posy INT);";
     const std::string sql_create_data =
         "CREATE TABLE data (sensor TEXT, time INT, value REAL, PRIMARY KEY(sensor, time));";
     
     sqlite3_exec(db, sql_create_settings.c_str(), 0, 0, &err);
-    std::cout<<"error: "<<err<<std::endl;
+    if(err!=NULL)
+        std::cout<<"error: "<<err<<std::endl;
     sqlite3_exec(db, sql_create_sensors.c_str(), 0, 0, &err);
-    std::cout<<"error: "<<err<<std::endl;
+    if(err!=NULL)
+        std::cout<<"error: "<<err<<std::endl;
     sqlite3_exec(db, sql_create_data.c_str(), 0, 0, &err);
-    std::cout<<"error: "<<err<<std::endl;
+    if(err!=NULL)
+        std::cout<<"error: "<<err<<std::endl;
 }
 
 void SensorDatabase::remove() {
@@ -50,20 +53,25 @@ void SensorDatabase::addSetting(const std::string name) {
         "INSERT INTO settings VALUES ('"+name+"');";
 
     sqlite3_exec(db, sql_add_setting.c_str(), 0, 0, &err);
-    std::cout<<"error: "<<err<<std::endl;
-    sqlite3_free(err);
+    if(err!=NULL) {
+        std::cout<<"error: "<<err<<std::endl;
+        sqlite3_free(err);
+    }
 }
 
-void SensorDatabase::addSensor(const std::string name, const std::string id,
+void SensorDatabase::addSensor(const std::string name, const std::string id, const std::string type,
                                const std::string unit, const std::string setting,
                                const unsigned int pos_x, const unsigned int pos_y)
 {
     char *err = 0;
     const std::string sql_add_sensor =
-    "INSERT INTO sensors VALUES ('"+name+"', '"+id+"', '"+unit+"', '"+setting+"','"+std::to_string(pos_x)+"', '"+std::to_string(pos_y)+"');";
+    "INSERT INTO sensors VALUES ('"+name+"', '"+id+"', '"+type+"', '"+unit+"', '"+setting+"','"+std::to_string(pos_x)+"', '"+std::to_string(pos_y)+"');";
 
     sqlite3_exec(db, sql_add_sensor.c_str(), 0, 0, &err);
-    std::cout<<"error: "<<err<<std::endl;
+    if(err!=NULL) {
+        std::cout<<"error: "<<err<<std::endl;
+        sqlite3_free(err);
+    }
 }
 
 void SensorDatabase::addValue(const std::string sensor_name, const long long time, const double value) {
@@ -72,13 +80,15 @@ void SensorDatabase::addValue(const std::string sensor_name, const long long tim
         "INSERT INTO data VALUES ('"+sensor_name+"', "+std::to_string(time)+", "+std::to_string(value)+");";
 
     sqlite3_exec(db, sql_add_value.c_str(), 0, 0, &err);
-    std::cout<<"error: "<<err<<std::endl;
+    if(err!=NULL) {
+        std::cout<<"error: "<<err<<std::endl;
+        sqlite3_free(err);
+    }
 }
 
 std::map<long long, double> SensorDatabase::getValueRange(const std::string sensor_name,
                                                   const long long start, const long long end)
 {
-    //std::vector<double> values;
     std::map<long long, double> values;
     const std::string sql_get_valuerange =
         "SELECT time, value FROM data WHERE sensor='"+sensor_name+"' AND time BETWEEN "+std::to_string(start)+" AND "+std::to_string(end)+";";
@@ -89,13 +99,9 @@ std::map<long long, double> SensorDatabase::getValueRange(const std::string sens
     while(sqlite3_step(stmt) == SQLITE_ROW) {
         const long long time = sqlite3_column_int64(stmt, 0);
         const double val = sqlite3_column_double(stmt, 1);
-        //values.push_back(val);
         values[time] = val;
     }
     sqlite3_finalize(stmt);
-
-//    for (int i=0; i<values.size(); i++)
-//        std::cout<<"data: "<<values[i]<<std::endl;
 
     return values;
 }
