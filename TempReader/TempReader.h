@@ -6,10 +6,12 @@ class TempReader {
     private:
         std::string ow_arguments;
 
+        std::string root_dir;
+
         std::string getValueFromPath(const std::string path);
 
     public:
-        TempReader();
+        TempReader(const bool cached=true);
         ~TempReader();
 
         // open, close
