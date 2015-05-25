@@ -1,0 +1,5 @@
+FindSQLite3.cmake:
+http://svn.openstreetmap.org/applications/utils/export/osm2poidb/cmake/Modules/FindSQLite3.cmake
+
+FindOWFS.cmake:
+http://ppi-server.googlecode.com/svn-history/r631/trunk/server/cmake/FindOWFS.cmake
