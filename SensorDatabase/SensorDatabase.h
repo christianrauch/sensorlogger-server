@@ -1,3 +1,6 @@
+#ifndef __SENSORDATABASE_H__
+#define __SENSORDATABASE_H__
+
 #include <sqlite3.h>
 #include <vector>
 #include <map>
@@ -63,3 +66,4 @@ class SensorDatabase {
 
 };
 
+#endif

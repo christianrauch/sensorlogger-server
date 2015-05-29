@@ -1,3 +1,6 @@
+#ifndef __TEMPREADER_H__
+#define __TEMPREADER_H__
+
 #include <owcapi.h>
 #include "Sensor.h"
 #include <vector>
@@ -30,3 +33,5 @@ class TempReader {
         // get all sensors
         std::vector<Sensor> getSensors();
 };
+
+#endif
