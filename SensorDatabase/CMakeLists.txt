@@ -1,5 +1,3 @@
-message("modules" ${CMAKE_MODULE_PATH})
-
 find_package(SQLite3 REQUIRED)
 
 include_directories(${SQLITE3_INCLUDE_DIRS})
