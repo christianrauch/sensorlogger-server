@@ -16,7 +16,7 @@ void SensorDatabase::init() {
     const std::string sql_create_settings =
         "CREATE TABLE settings (name TEXT PRIMARY KEY UNIQUE);";
     const std::string sql_create_sensors =
-        "CREATE TABLE sensors (name TEXT PRIMARY KEY UNIQUE, id TEXT, type TEXT, unit TEXT, setting TEXT, posx INT, posy INT);";
+        "CREATE TABLE sensors (name TEXT PRIMARY KEY UNIQUE, id TEXT, family TEXT, type TEXT, unit TEXT, setting TEXT);";
     const std::string sql_create_data =
         "CREATE TABLE data (sensor TEXT, time INT, value REAL, PRIMARY KEY(sensor, time));";
     
@@ -59,13 +59,12 @@ void SensorDatabase::addSetting(const std::string name) {
     }
 }
 
-void SensorDatabase::addSensor(const std::string name, const std::string id, const std::string type,
-                               const std::string unit, const std::string setting,
-                               const unsigned int pos_x, const unsigned int pos_y)
+void SensorDatabase::addSensor(const std::string name, const std::string id, const std::string family, const std::string type,
+                               const std::string unit, const std::string setting)
 {
     char *err = 0;
     const std::string sql_add_sensor =
-    "INSERT INTO sensors VALUES ('"+name+"', '"+id+"', '"+type+"', '"+unit+"', '"+setting+"','"+std::to_string(pos_x)+"', '"+std::to_string(pos_y)+"');";
+    "INSERT INTO sensors VALUES ('"+name+"', '"+id+"', '"+family+"','"+type+"', '"+unit+"', '"+setting+"');";
 
     sqlite3_exec(db, sql_add_sensor.c_str(), 0, 0, &err);
     if(err!=NULL) {
@@ -122,5 +121,24 @@ std::vector<std::string> SensorDatabase::getSensorsString(const std::string sett
     sqlite3_finalize(stmt);
 
     return sensors_value;
+}
+
+std::set<std::pair<std::string, std::string>> SensorDatabase::getSensorAddress(const std::string key, const std::string value) {
+    std::set<std::pair<std::string, std::string>> sensors_address;
+
+    const std::string sql_get_sensors_address =
+        "SELECT family,id FROM sensors WHERE "+key+"='"+value+"';";
+
+    sqlite3_stmt *stmt;
+    sqlite3_prepare_v2(db, sql_get_sensors_address.c_str(), -1, &stmt, 0);
+
+    while(sqlite3_step(stmt) == SQLITE_ROW) {
+        const std::string family = (char*)sqlite3_column_text(stmt, 0);
+        const std::string id = (char*)sqlite3_column_text(stmt, 1);
+        sensors_address.insert(std::make_pair(family,id));
+    }
+    sqlite3_finalize(stmt);
+
+    return sensors_address;
 }
 
