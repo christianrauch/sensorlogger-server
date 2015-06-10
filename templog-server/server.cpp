@@ -5,6 +5,7 @@
 #include "Timer.h"
 #include "logger.h"
 
+#include <SensorLoggerCommunicationServer.h>
 
 void dbg_db_fake(SensorDatabase &db) {
     //db.reset();
@@ -27,6 +28,7 @@ int main() {
     db.open("logger.db");
 
     std::cout<<"addr db: "<<&db<<std::endl;
+    std::cout<<"addr reader: "<<&reader<<std::endl;
     // init with example data
     dbg_db_fake(db);
     dbg_reader_fake(reader);
@@ -46,6 +48,10 @@ int main() {
     //pthread_create(&th_logger, NULL, logger, (void*)period);
     pthread_create(&th_logger, NULL, logger, &conf);
     //pthread_create(&th_logger, NULL, logger, NULL);
+
+    SensorLoggerCommunicationServer s(9090, db, reader);
+
+    s.start();
 
     pthread_join(th_logger, NULL);
 
