@@ -33,7 +33,8 @@ class SensorDatabase {
         void addSetting(const std::string name);
 
         void addSensor(const std::string name, const std::string id, const std::string family, const std::string type,
-                       const std::string unit, const std::string setting);
+                       const std::string unit, const std::string setting,
+                       const std::vector<double> position = {0.0, 0.0});
 
         void addValue(const std::string sensor_name,
                       const long long time, const double value);
@@ -63,6 +64,7 @@ class SensorDatabase {
             return getSensorAddress("name", name);
         }
 
+        std::vector<double> getSensorPosition(const std::string name);
 
 };
 

@@ -45,7 +45,7 @@ Sensor TempReader::getSensor(const std::string family, const std::string id) {
     const std::string type = getValueFromPath(path_type);
     const double temp = std::stod(getValueFromPath(path_temp));
 
-    return Sensor(family, id, type, timestamp, temp);
+    return Sensor(family, id, type, timestamp, temp, "°C");
 }
 
 std::vector<Sensor> TempReader::getSensors() {

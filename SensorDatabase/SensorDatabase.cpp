@@ -1,5 +1,6 @@
 #include <iostream>
 #include "SensorDatabase.h"
+#include <sqlite3.h>
 
 SensorDatabase::SensorDatabase(const std::string path) {
     open(path);
@@ -16,7 +17,7 @@ void SensorDatabase::init() {
     const std::string sql_create_settings =
         "CREATE TABLE settings (name TEXT PRIMARY KEY UNIQUE);";
     const std::string sql_create_sensors =
-        "CREATE TABLE sensors (name TEXT PRIMARY KEY UNIQUE, id TEXT, family TEXT, type TEXT, unit TEXT, setting TEXT);";
+        "CREATE TABLE sensors (name TEXT PRIMARY KEY UNIQUE, id TEXT, family TEXT, type TEXT, unit TEXT, setting TEXT, pos_x REAL, pos_y REAL);";
     const std::string sql_create_data =
         "CREATE TABLE data (sensor TEXT, time INT, value REAL, PRIMARY KEY(sensor, time));";
     
@@ -60,11 +61,12 @@ void SensorDatabase::addSetting(const std::string name) {
 }
 
 void SensorDatabase::addSensor(const std::string name, const std::string id, const std::string family, const std::string type,
-                               const std::string unit, const std::string setting)
+                               const std::string unit, const std::string setting,
+                               const std::vector<double> position)
 {
     char *err = 0;
     const std::string sql_add_sensor =
-    "INSERT INTO sensors VALUES ('"+name+"', '"+id+"', '"+family+"','"+type+"', '"+unit+"', '"+setting+"');";
+    "INSERT INTO sensors VALUES ('"+name+"', '"+id+"', '"+family+"','"+type+"', '"+unit+"', '"+setting+"', "+std::to_string(position[0])+", "+std::to_string(position[1])+");";
 
     sqlite3_exec(db, sql_add_sensor.c_str(), 0, 0, &err);
     if(err!=NULL) {
@@ -140,5 +142,24 @@ std::set<std::pair<std::string, std::string>> SensorDatabase::getSensorAddress(c
     sqlite3_finalize(stmt);
 
     return sensors_address;
+}
+
+std::vector<double> SensorDatabase::getSensorPosition(const std::string name) {
+    std::vector<double> sensor_pos;
+
+    const std::string sql_get_sensors_position =
+        "SELECT pos_x, pos_y FROM sensors WHERE name='"+name+"';";
+
+    sqlite3_stmt *stmt;
+    sqlite3_prepare_v2(db, sql_get_sensors_position.c_str(), -1, &stmt, 0);
+
+    while(sqlite3_step(stmt) == SQLITE_ROW) {
+        sensor_pos.push_back(sqlite3_column_double(stmt, 0));
+        sensor_pos.push_back(sqlite3_column_double(stmt, 1));
+    }
+
+    sqlite3_finalize(stmt);
+
+    return sensor_pos;
 }
 
