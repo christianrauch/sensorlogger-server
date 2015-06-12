@@ -1,11 +1,11 @@
-#include <SensorDatabase.h>
-#include <TempReader.h>
+#include <SensorDatabase/SensorDatabase.h>
+#include <TempReader/TempReader.h>
 #include <pthread.h>
 #include <iostream>
 #include "Timer.h"
 #include "logger.h"
 
-#include <SensorLoggerCommunicationServer.h>
+#include <CommunicationService/SensorLoggerCommunicationServer.h>
 
 void dbg_db_fake(SensorDatabase &db) {
     //db.reset();

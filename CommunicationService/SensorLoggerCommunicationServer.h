@@ -1,6 +1,6 @@
 #include <thrift/server/TSimpleServer.h>
-#include <SensorDatabase.h>
-#include <TempReader.h>
+#include <SensorDatabase/SensorDatabase.h>
+#include <TempReader/TempReader.h>
 
 using namespace ::apache::thrift;
 using namespace ::apache::thrift::protocol;

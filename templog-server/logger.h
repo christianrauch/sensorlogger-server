@@ -1,6 +1,6 @@
 #include <iostream>
-#include <SensorDatabase.h>
-#include <TempReader.h>
+#include <SensorDatabase/SensorDatabase.h>
+#include <TempReader/TempReader.h>
 
 struct LoggerConfig {
     time_t period;          // period in seconds

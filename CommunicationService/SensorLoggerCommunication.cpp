@@ -1,4 +1,6 @@
 #include "SensorLoggerCommunication.h"
+#include <SensorDatabase/SensorDatabase.h>
+#include <TempReader/TempReader.h>
 
 using namespace  ::communication;
 

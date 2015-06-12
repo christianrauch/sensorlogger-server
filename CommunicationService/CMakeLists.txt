@@ -30,8 +30,7 @@ list(REMOVE_ITEM SERVICE_SRC ${SERVICE_SKEL_SRC})
 add_library(sensor_logger_communication_base ${SERVICE_SRC})
 
 include_directories(${T_SOURCE_PATH})
-include_directories(${CMAKE_SOURCE_DIR}/SensorDatabase)
-include_directories(${CMAKE_SOURCE_DIR}/TempReader)
+include_directories(${CMAKE_SOURCE_DIR})
 
 add_library(sensor_logger_communication SensorLoggerCommunicationServer.cpp)
 target_link_libraries(sensor_logger_communication sensor_logger_communication_base)

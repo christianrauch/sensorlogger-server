@@ -10,7 +10,7 @@ add_subdirectory(SensorDatabase)
 add_subdirectory(TempReader)
 add_subdirectory(CommunicationService)
 
-include_directories(SensorDatabase TempReader CommunicationService)
+include_directories(${CMAKE_SOURCE_DIR})
 
 add_subdirectory(templog-server)
 
