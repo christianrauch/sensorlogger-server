@@ -39,6 +39,8 @@ class SensorDatabase {
         void addValue(const std::string sensor_name,
                       const long long time, const double value);
 
+        std::vector<std::string> getSettings();
+
         std::map<long long, double> getValueRange(const std::string sensor_name,
                                           const long long start, const long long end);
 
@@ -58,6 +60,7 @@ class SensorDatabase {
             return getSensorAddress("setting", setting);
         }
 
+        // return sensor address as pair (family,id)
         std::set<std::pair<std::string, std::string>> getSensorAddressByName(const std::string name) {
             // there should be only one address per sensor name, as names are
             // unique, but we will return a whole set anyway

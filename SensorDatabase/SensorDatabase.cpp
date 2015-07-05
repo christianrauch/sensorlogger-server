@@ -87,6 +87,23 @@ void SensorDatabase::addValue(const std::string sensor_name, const long long tim
     }
 }
 
+std::vector<std::string> SensorDatabase::getSettings() {
+    std::vector<std::string> settings;
+
+    const std::string sql_get_settings =
+        "SELECT name FROM settings;";
+
+    sqlite3_stmt *stmt;
+    sqlite3_prepare_v2(db, sql_get_settings.c_str(), -1, &stmt, 0);
+
+    while(sqlite3_step(stmt) == SQLITE_ROW) {
+        settings.push_back((char*)sqlite3_column_text(stmt, 0));
+    }
+    sqlite3_finalize(stmt);
+
+    return settings;
+}
+
 std::map<long long, double> SensorDatabase::getValueRange(const std::string sensor_name,
                                                   const long long start, const long long end)
 {
