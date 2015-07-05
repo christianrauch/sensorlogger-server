@@ -8,11 +8,11 @@
 #include <CommunicationService/SensorLoggerCommunicationServer.h>
 
 void dbg_db_fake(SensorDatabase &db) {
-    //db.reset();
+    db.reset();
     db.addSetting("basement");
-    db.addSensor("pipe", "67C6697351FF", "28", "DS18B20", "°C", "keller");
-    db.addSensor("oven", "4AEC29CDBAAB", "10", "DS18B20", "°C", "keller");
-    db.addSensor("watertank", "F2FBE3467CC2", "10", "DS18B20", "°C", "keller");
+    db.addSensor("pipe", "67C6697351FF", "28", "DS18B20", "°C", "basement");
+    db.addSensor("oven", "4AEC29CDBAAB", "10", "DS18B20", "°C", "basement");
+    db.addSensor("watertank", "F2FBE3467CC2", "10", "DS18B20", "°C", "basement");
 }
 
 void dbg_reader_fake(TempReader &reader) {
