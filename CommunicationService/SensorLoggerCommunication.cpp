@@ -25,9 +25,15 @@ public:
         std::cout<<"db: "<<db<<std::endl;
     }
 
-    void getSensorRange(std::map<int64_t, double> & _return, const std::string& name, const int64_t t_start, const int64_t t_end) {
+    void getSensorValueRange(std::map<int64_t, double> & _return, const std::string& name, const int64_t t_start, const int64_t t_end) {
         // Your implementation goes here
         printf("getSensorRange\n");
+    }
+
+    void getSettings(std::vector<std::string> & _return) {
+        // Your implementation goes here
+        printf("getSettings\n");
+        _return = db->getSettings();
     }
 
     void addSetting(const std::string& name, const std::string& image) {
@@ -59,6 +65,19 @@ public:
             _return.push_back(s);
         }
     }
+
+    void getSensorNamesBySetting(std::vector< std::string > & _return, const std::string& name) {
+      // Your implementation goes here
+      printf("getSensorNamesBySetting\n");
+      _return = db->getSensorNames(name);
+    }
+
+    void getSensorPosition(std::vector<double> & _return, const std::string& name) {
+      // Your implementation goes here
+      printf("getSensorPosition\n");
+      _return = db->getSensorPosition(name);
+    }
+
 
 };
 
