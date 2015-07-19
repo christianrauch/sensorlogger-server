@@ -10,6 +10,18 @@ private:
     SensorDatabase *db = NULL;
     TempReader *reader = NULL;
 
+    static ::communication::Sensor fromSensorOW(const ::Sensor &s_ow) {
+        ::communication::Sensor s;
+        s.family = s_ow.family;
+        s.id = s_ow.id;
+        s.type = s_ow.type;
+        s.time = s_ow.time;
+        s.value = s_ow.value;
+        s.unit = s_ow.unit;
+
+        return s;
+    }
+
 public:
     SensorLoggerCommunicationHandler(SensorDatabase &db, TempReader &reader){
         std::cout<<"db Handle: "<<&db<<std::endl;
@@ -55,14 +67,7 @@ public:
 
         // copy data between different Sensor classes
         for(auto s_ow: sensors_ow) {
-            ::communication::Sensor s;
-            s.family = s_ow.family;
-            s.id = s_ow.id;
-            s.type = s_ow.type;
-            s.time = s_ow.time;
-            s.value = s_ow.value;
-            s.unit = s_ow.unit;
-            _return.push_back(s);
+            _return.push_back(fromSensorOW(s_ow));
         }
     }
 
