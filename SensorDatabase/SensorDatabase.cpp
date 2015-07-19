@@ -1,6 +1,6 @@
 #include <iostream>
 #include "SensorDatabase.h"
-#include <sqlite3.h>
+#include <cstring>
 
 SensorDatabase::SensorDatabase(const std::string path) {
     open(path);
@@ -48,16 +48,29 @@ int SensorDatabase::open(const std::string path) {
     return sqlite3_open(path.c_str(), &db);
 }
 
-void SensorDatabase::addSetting(const std::string name) {
+void SensorDatabase::addSetting(const std::string name, const std::vector<char> image) {
     char *err = 0;
+    int rc;
     const std::string sql_add_setting =
-        "INSERT INTO settings VALUES ('"+name+"');";
+        "INSERT INTO settings VALUES ('"+name+"', ?);";
 
-    sqlite3_exec(db, sql_add_setting.c_str(), 0, 0, &err);
-    if(err!=NULL) {
-        std::cout<<"error: "<<err<<std::endl;
-        sqlite3_free(err);
+    sqlite3_stmt *stmt;
+    rc = sqlite3_prepare_v2(db, sql_add_setting.c_str(), -1, &stmt, 0);
+    if(rc!=SQLITE_OK){
+        std::cerr << "prepare failed: " << sqlite3_errmsg(db) << std::endl;
     }
+
+    rc = sqlite3_bind_blob(stmt, 1, image.data(), image.size(), SQLITE_STATIC);
+    if(rc!=SQLITE_OK){
+        std::cerr << "bind failed: " << sqlite3_errmsg(db) << std::endl;
+    }
+
+    rc = sqlite3_step(stmt);
+    if(rc!=SQLITE_OK){
+        std::cerr << "execution failed: " << sqlite3_errmsg(db) << std::endl;
+    }
+
+    sqlite3_finalize(stmt);
 }
 
 void SensorDatabase::addSensor(const std::string name, const std::string id, const std::string family, const std::string type,
@@ -178,5 +191,26 @@ std::vector<double> SensorDatabase::getSensorPosition(const std::string name) {
     sqlite3_finalize(stmt);
 
     return sensor_pos;
+}
+
+std::vector<char> SensorDatabase::getSettingImage(const std::string name) {
+    std::vector<char> image;
+
+    const std::string sql_get_setting_image =
+            "SELECT image FROM settings WHERE name='"+name+"'";
+
+    sqlite3_stmt *stmt;
+    sqlite3_prepare_v2(db, sql_get_setting_image.c_str(), -1, &stmt, 0);
+
+    while(sqlite3_step(stmt) == SQLITE_ROW) {
+        const void *data = sqlite3_column_blob(stmt,0);
+        const int n = sqlite3_column_bytes(stmt,0);
+        image.resize(n);
+        memcpy(image.data(), data, n);
+    }
+
+    sqlite3_finalize(stmt);
+
+    return image;
 }
 
