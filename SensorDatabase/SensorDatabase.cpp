@@ -48,7 +48,7 @@ int SensorDatabase::open(const std::string path) {
     return sqlite3_open(path.c_str(), &db);
 }
 
-void SensorDatabase::addSetting(const std::string name, const std::vector<char> image) {
+void SensorDatabase::addSetting(const std::string name, const char* img_data, const size_t img_size) {
     char *err = 0;
     int rc;
     const std::string sql_add_setting =
@@ -60,7 +60,7 @@ void SensorDatabase::addSetting(const std::string name, const std::vector<char> 
         std::cerr << "prepare failed: " << sqlite3_errmsg(db) << std::endl;
     }
 
-    rc = sqlite3_bind_blob(stmt, 1, image.data(), image.size(), SQLITE_STATIC);
+    rc = sqlite3_bind_blob(stmt, 1, img_data, img_size, SQLITE_STATIC);
     if(rc!=SQLITE_OK){
         std::cerr << "bind failed: " << sqlite3_errmsg(db) << std::endl;
     }
@@ -193,9 +193,7 @@ std::vector<double> SensorDatabase::getSensorPosition(const std::string name) {
     return sensor_pos;
 }
 
-std::vector<char> SensorDatabase::getSettingImage(const std::string name) {
-    std::vector<char> image;
-
+void SensorDatabase::getSettingImage(const std::string name, const char* img_data, size_t* img_size) {
     const std::string sql_get_setting_image =
             "SELECT image FROM settings WHERE name='"+name+"'";
 
@@ -203,14 +201,10 @@ std::vector<char> SensorDatabase::getSettingImage(const std::string name) {
     sqlite3_prepare_v2(db, sql_get_setting_image.c_str(), -1, &stmt, 0);
 
     while(sqlite3_step(stmt) == SQLITE_ROW) {
-        const void *data = sqlite3_column_blob(stmt,0);
-        const int n = sqlite3_column_bytes(stmt,0);
-        image.resize(n);
-        memcpy(image.data(), data, n);
+        img_data = (char*)sqlite3_column_blob(stmt,0);
+        *img_size = sqlite3_column_bytes(stmt,0);
     }
 
     sqlite3_finalize(stmt);
-
-    return image;
 }
 

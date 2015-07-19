@@ -30,7 +30,7 @@ class SensorDatabase {
 
         sqlite3* getdb() {return db;};
 
-        void addSetting(const std::string name, const std::vector<char> image = {});
+        void addSetting(const std::string name, const char* img_data = NULL, const size_t img_size = 0);
 
         void addSensor(const std::string name, const std::string id, const std::string family, const std::string type,
                        const std::string unit, const std::string setting,
@@ -69,7 +69,7 @@ class SensorDatabase {
 
         std::vector<double> getSensorPosition(const std::string name);
 
-        std::vector<char> getSettingImage(const std::string name);
+        void getSettingImage(const std::string name, const char* img_data, size_t* img_size);
 };
 
 #endif
