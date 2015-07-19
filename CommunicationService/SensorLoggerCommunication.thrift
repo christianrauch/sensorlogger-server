@@ -12,6 +12,8 @@ struct Sensor {
 
 service SensorLoggerCommunication {
 
+    /* configure new setting */
+
     // return list of all available settings
     list<string> getSettings()
 
@@ -26,6 +28,12 @@ service SensorLoggerCommunication {
     oneway void addSensor(1: string name, 2: string id, 3: string family, 4: string type,
         5: string unit, 6: string setting, 7: list<double> position)
 
+
+    /* load setting */
+
+    // fetch image to display
+    binary getSensorImage(1: string name)
+
     // get sensors and values of setting
     list<string> getSensorNamesBySetting(1: string name)
 
@@ -35,5 +43,9 @@ service SensorLoggerCommunication {
     // get sensor value in time range
     map<i64,double> getSensorValueRange(1: string name, 2: i64 t_start, 3: i64 t_end)
 
+    // fetch sensor position for image
     list<double> getSensorPosition(1: string name)
+
+    // get complete sensor (value, unit) by name
+    Sensor getSensorByName(1: string name)
 }

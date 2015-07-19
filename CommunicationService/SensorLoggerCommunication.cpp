@@ -51,13 +51,26 @@ public:
     void addSetting(const std::string& name, const std::string& image) {
         // Your implementation goes here
         printf("addSetting\n");
-        db->addSetting(name);
+        db->addSetting(name, image.data(), image.size());
     }
 
     void addSensor(const std::string& name, const std::string& id, const std::string& family, const std::string& type, const std::string& unit, const std::string& setting, const std::vector<double> & position) {
         // Your implementation goes here
         printf("addSensor\n");
         db->addSensor(name, id, family, type, unit, setting, position);
+    }
+
+    void getSensorImage(std::string& _return, const std::string& name) {
+      // Your implementation goes here
+      printf("getSensorImage\n");
+      const char* img_data = NULL;
+      size_t img_size;
+      db->getSettingImage(name, img_data, &img_size);
+
+      if(img_data!=NULL)
+        _return = std::string(img_data, img_size);
+      else
+          std::cerr<<"could not read image from setting "<<name<<std::endl;
     }
 
     void getSensorOnline(std::vector< ::communication::Sensor > &_return) {
@@ -83,6 +96,14 @@ public:
       _return = db->getSensorPosition(name);
     }
 
-
+    void getSensorByName(communication::Sensor& _return, const std::string& name) {
+      // Your implementation goes here
+      printf("getSensorByName\n");
+      const std::set<std::pair<std::string, std::string>> sensor_addr =
+              db->getSensorAddressByName(name);
+      std::cout<<"size: "<<sensor_addr.size()<<std::endl;
+      // return first element (name is assumed to be unique)
+      _return = fromSensorOW(reader->getSensor(sensor_addr.begin()->first,
+                                               sensor_addr.begin()->second));
+    }
 };
-
