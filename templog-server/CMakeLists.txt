@@ -8,6 +8,6 @@ target_link_libraries(logger timer)
 # main executable
 add_executable(server server.cpp)
 target_link_libraries(server sensor_database temp_reader logger)
-target_link_libraries(server sensor_logger_communication)
+target_link_libraries(server sensor_logger_communication_server)
 target_link_libraries(server pthread)
 

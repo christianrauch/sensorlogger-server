@@ -1,6 +1,6 @@
 #include "SensorLoggerCommunicationServer.h"
 
-#include "SensorLoggerCommunication.h"
+#include <SensorLoggerCommunication.h>
 #include <thrift/protocol/TBinaryProtocol.h>
 
 #include <thrift/transport/TServerSocket.h>

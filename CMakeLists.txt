@@ -8,6 +8,7 @@ set(CMAKE_CXX_FLAGS "-std=c++11")
 
 add_subdirectory(SensorDatabase)
 add_subdirectory(TempReader)
+add_subdirectory(CommunicationInterface)
 add_subdirectory(CommunicationService)
 
 include_directories(${CMAKE_SOURCE_DIR})

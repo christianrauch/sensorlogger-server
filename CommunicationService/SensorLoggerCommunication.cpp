@@ -1,4 +1,4 @@
-#include "SensorLoggerCommunication.h"
+#include <SensorLoggerCommunication.h>
 #include <SensorDatabase/SensorDatabase.h>
 #include <TempReader/TempReader.h>
 #include <TempReader/Sensor.h>
