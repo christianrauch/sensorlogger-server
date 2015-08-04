@@ -15,7 +15,7 @@ void SensorDatabase::init() {
     char *err = 0;
 
     const std::string sql_create_settings =
-        "CREATE TABLE settings (name TEXT PRIMARY KEY UNIQUE);";
+        "CREATE TABLE settings (name TEXT PRIMARY KEY UNIQUE, image BLOB);";
     const std::string sql_create_sensors =
         "CREATE TABLE sensors (name TEXT PRIMARY KEY UNIQUE, id TEXT, family TEXT, type TEXT, unit TEXT, setting TEXT, pos_x REAL, pos_y REAL);";
     const std::string sql_create_data =
@@ -45,11 +45,14 @@ void SensorDatabase::close() {
 }
 
 int SensorDatabase::open(const std::string path) {
-    return sqlite3_open(path.c_str(), &db);
+    const int rc = sqlite3_open(path.c_str(), &db);
+    if(rc!=SQLITE_OK){
+        std::cerr << "open failed ("<<rc<<"): " << sqlite3_errmsg(db) << std::endl;
+    }
+    return rc;
 }
 
 void SensorDatabase::addSetting(const std::string name, const char* img_data, const size_t img_size) {
-    char *err = 0;
     int rc;
     const std::string sql_add_setting =
         "INSERT INTO settings VALUES ('"+name+"', ?);";
@@ -57,17 +60,17 @@ void SensorDatabase::addSetting(const std::string name, const char* img_data, co
     sqlite3_stmt *stmt;
     rc = sqlite3_prepare_v2(db, sql_add_setting.c_str(), -1, &stmt, 0);
     if(rc!=SQLITE_OK){
-        std::cerr << "prepare failed: " << sqlite3_errmsg(db) << std::endl;
+        std::cerr << "prepare failed ("<<rc<<"): " << sqlite3_errmsg(db) << std::endl;
     }
 
     rc = sqlite3_bind_blob(stmt, 1, img_data, img_size, SQLITE_STATIC);
     if(rc!=SQLITE_OK){
-        std::cerr << "bind failed: " << sqlite3_errmsg(db) << std::endl;
+        std::cerr << "bind failed ("<<rc<<"): " << sqlite3_errmsg(db) << std::endl;
     }
 
     rc = sqlite3_step(stmt);
-    if(rc!=SQLITE_OK){
-        std::cerr << "execution failed: " << sqlite3_errmsg(db) << std::endl;
+    if(rc!=SQLITE_DONE){
+        std::cerr << "execution failed ("<<rc<<"): " << sqlite3_errmsg(db) << std::endl;
     }
 
     sqlite3_finalize(stmt);
