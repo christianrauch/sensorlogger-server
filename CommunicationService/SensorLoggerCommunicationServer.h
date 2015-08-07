@@ -14,5 +14,7 @@ class SensorLoggerCommunicationServer {
         SensorLoggerCommunicationServer(unsigned int port, SensorDatabase &db, TempReader &reader);
         ~SensorLoggerCommunicationServer();
 		
-		void start();
+        void start();
+
+        void stop();
 };

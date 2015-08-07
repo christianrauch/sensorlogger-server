@@ -2,6 +2,7 @@
 #include <SensorDatabase/SensorDatabase.h>
 #include <TempReader/TempReader.h>
 #include <TempReader/Sensor.h>
+#include <iostream>
 
 using namespace  ::communication;
 
