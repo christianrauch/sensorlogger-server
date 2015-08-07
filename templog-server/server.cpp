@@ -8,6 +8,12 @@
 
 #include <CommunicationService/SensorLoggerCommunicationServer.h>
 
+#ifndef NDEBUG
+    #define CONFPATH "../templog.conf"
+#else
+    #define CONFPATH "/etc/templog.conf"
+#endif
+
 void dbg_db_fake(SensorDatabase &db) {
     db.reset();
     std::string image_data = "abcdef";
@@ -24,12 +30,13 @@ void dbg_reader_fake(TempReader &reader) {
 }
 
 int main() {
+    std::cout<<"reading config from: "<<CONFPATH<<std::endl;
     // read configuration
     GKeyFile *conf_file = g_key_file_new ();
     GKeyFileFlags conffile_flags;
     GError *conffile_error = NULL;
 
-    if(!g_key_file_load_from_file(conf_file, "../templog.conf", conffile_flags, &conffile_error)) {
+    if(!g_key_file_load_from_file(conf_file, CONFPATH, conffile_flags, &conffile_error)) {
         g_error(conffile_error->message);
     }
 
