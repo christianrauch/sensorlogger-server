@@ -4,5 +4,8 @@ http://svn.openstreetmap.org/applications/utils/export/osm2poidb/cmake/Modules/F
 FindOWFS.cmake:
 http://ppi-server.googlecode.com/svn-history/r631/trunk/server/cmake/FindOWFS.cmake
 
+FindThrift.cmake:
+https://raw.githubusercontent.com/Parquet/parquet-cpp/master/cmake_modules/FindThrift.cmake
+
 FindGLIB.cmake:
 https://github.com/WebKit/webkit/blob/master/Source/cmake/FindGLIB.cmake

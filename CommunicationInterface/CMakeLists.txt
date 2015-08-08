@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 2.8)
 
+# find thrift
+set(ENV{THRIFT_HOME} /usr)
+find_package(Thrift REQUIRED)
+
 # input and output of thrift compiler
 set(T_FILE "SensorLoggerCommunication")
 set(T_OUTPUT "thrift-service-cpp")
@@ -20,23 +24,20 @@ set(T_OUTPUT_HPP
 	${T_OUTPUT_PATH}/${T_FILE}_types.h
 )
 
-# find executable
-find_program(THRIFT_BIN thrift)
-
 # generate code
-if (THRIFT_BIN)
-    message("Found thrift compiler at: " ${THRIFT_BIN})
+if (THRIFT_COMPILER)
+    message("Found thrift compiler at: " ${THRIFT_COMPILER})
 	# create folder and generate code
 	add_custom_command(
 		OUTPUT ${T_OUTPUT_SRC}
 		COMMAND ${CMAKE_COMMAND} -E make_directory ${T_OUTPUT_PATH}
 		COMMAND ${THRIFT_BIN} -v -r --gen cpp -out ${T_OUTPUT_PATH} ${T_FILE_PATH}
 	)
-else(THRIFT_BIN)
+else(THRIFT_COMPILER)
     message(SEND_ERROR "Cannot find thrift compiler in path.")
-endif(THRIFT_BIN)
+endif(THRIFT_COMPILER)
 
-add_library(sensor_logger_communication SHARED ${T_OUTPUT_SRC})
-target_link_libraries(sensor_logger_communication -lthrift)
+add_library(sensor_logger_communication ${T_OUTPUT_SRC})
+target_link_libraries(sensor_logger_communication ${THRIFT_STATIC_LIB})
 target_include_directories(sensor_logger_communication PUBLIC ${T_OUTPUT_PATH})
 
