@@ -1,0 +1,16 @@
+Source: sensorloggerserver
+Maintainer: Christian Rauch <Rauch.Christian@gmx.de>
+Section: misc
+Priority: optional
+Standards-Version: 3.9.2
+Build-Depends: debhelper (>= 9), dh-systemd (>= 1.5), cmake, libsqlite3-dev, libow-dev, libglib2.0-dev
+
+Package: sensorlogger-server
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Sensor logging server
+
+Package: libsensorlogger-dev
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Sensor logger headers
