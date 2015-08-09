@@ -19,3 +19,4 @@ include_directories(${CMAKE_SOURCE_DIR})
 
 add_subdirectory(templog-server)
 
+install(FILES resources/templog.conf DESTINATION /etc)

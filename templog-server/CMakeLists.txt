@@ -10,12 +10,12 @@ add_library(logger logger.cpp)
 target_link_libraries(logger timer)
 
 # main executable
-add_executable(server server.cpp)
-target_link_libraries(server sensor_database temp_reader logger)
-target_link_libraries(server sensor_logger_communication_server)
-target_link_libraries(server pthread)
-target_link_libraries(server ${GLIB_LIBRARIES})
+add_executable(sensorlogger-server server.cpp)
+target_link_libraries(sensorlogger-server sensor_database temp_reader logger)
+target_link_libraries(sensorlogger-server sensor_logger_communication_server)
+target_link_libraries(sensorlogger-server pthread)
+target_link_libraries(sensorlogger-server ${GLIB_LIBRARIES})
 
-install(TARGETS server
+install(TARGETS sensorlogger-server
         RUNTIME DESTINATION bin)
-install(FILES templog.conf DESTINATION /etc)
+
