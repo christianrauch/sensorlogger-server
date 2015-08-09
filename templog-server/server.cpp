@@ -5,7 +5,7 @@
 #include "Timer.h"
 #include "logger.h"
 #include <glib.h>
-
+#include <unistd.h>
 #include <CommunicationService/SensorLoggerCommunicationServer.h>
 
 #ifdef DEBUG
@@ -54,7 +54,14 @@ int main() {
     SensorDatabase db;
     TempReader reader;
 
+    const int db_init = access(db_path, F_OK);
+
     db.open(db_path);
+
+    if(db_init!=0 && errno==ENOENT) {
+        std::cout<<"initiliazing database"<<std::endl;
+        db.init();
+    }
 
     std::cout<<"addr db: "<<&db<<std::endl;
     std::cout<<"addr reader: "<<&reader<<std::endl;
