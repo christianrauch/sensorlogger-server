@@ -71,8 +71,7 @@ int main() {
 
     reader.open();
 
-    LoggerConfig conf = {.period=period, .db=&db,
-        .reader=&reader, .setting="basement"};
+    LoggerConfig conf = {.period=period, .db=&db, .reader=&reader};
 
     pthread_t th_logger;
 
