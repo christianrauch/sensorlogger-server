@@ -16,3 +16,6 @@ target_link_libraries(server sensor_logger_communication_server)
 target_link_libraries(server pthread)
 target_link_libraries(server ${GLIB_LIBRARIES})
 
+install(TARGETS server
+        RUNTIME DESTINATION bin)
+install(FILES templog.conf DESTINATION /etc)

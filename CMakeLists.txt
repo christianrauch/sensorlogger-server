@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 2.6)
 
+if(${CMAKE_BUILD_TYPE} MATCHES Debug)
+add_definitions(-DDEBUG)
+endif()
+
 project(TempLogger)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)

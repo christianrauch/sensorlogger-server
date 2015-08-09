@@ -8,7 +8,7 @@
 
 #include <CommunicationService/SensorLoggerCommunicationServer.h>
 
-#ifndef NDEBUG
+#ifdef DEBUG
     #define CONFPATH "../templog.conf"
 #else
     #define CONFPATH "/etc/templog.conf"
@@ -58,15 +58,18 @@ int main() {
 
     std::cout<<"addr db: "<<&db<<std::endl;
     std::cout<<"addr reader: "<<&reader<<std::endl;
-    // init with example data
-    dbg_db_fake(db);
-    dbg_reader_fake(reader);
 
-    //reader.setDevice(std::string(device));
+    if(std::string(device)=="fake") {
+        // init with example data
+        std::cout<<"feeding fake data"<<std::endl;
+        dbg_db_fake(db);
+        dbg_reader_fake(reader);
+    }
+    else {
+        reader.setDevice(device);
+    }
 
     reader.open();
-
-    //const time_t period = 2; // seconds
 
     LoggerConfig conf = {.period=period, .db=&db,
         .reader=&reader, .setting="basement"};

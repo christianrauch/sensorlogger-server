@@ -31,7 +31,7 @@ if (THRIFT_COMPILER)
 	add_custom_command(
 		OUTPUT ${T_OUTPUT_SRC}
 		COMMAND ${CMAKE_COMMAND} -E make_directory ${T_OUTPUT_PATH}
-		COMMAND ${THRIFT_BIN} -v -r --gen cpp -out ${T_OUTPUT_PATH} ${T_FILE_PATH}
+		COMMAND ${THRIFT_COMPILER} -v -r --gen cpp -out ${T_OUTPUT_PATH} ${T_FILE_PATH}
 	)
 else(THRIFT_COMPILER)
     message(SEND_ERROR "Cannot find thrift compiler in path.")
@@ -41,3 +41,7 @@ add_library(sensor_logger_communication ${T_OUTPUT_SRC})
 target_link_libraries(sensor_logger_communication ${THRIFT_STATIC_LIB})
 target_include_directories(sensor_logger_communication PUBLIC ${T_OUTPUT_PATH})
 
+# install library and header files
+install(TARGETS sensor_logger_communication
+        ARCHIVE DESTINATION lib)
+install(FILES ${T_OUTPUT_HPP} DESTINATION include)
