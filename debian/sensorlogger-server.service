@@ -4,3 +4,7 @@ After=network.target
 [Service]
 Type=simple
 ExecStart=/usr/bin/sensorlogger-server
+User=sensorlogger
+
+[Install]
+WantedBy=multi-user.target
