@@ -32,11 +32,10 @@ void dbg_reader_fake(TempReader &reader) {
 int main() {
     std::cout<<"reading config from: "<<CONFPATH<<std::endl;
     // read configuration
-    GKeyFile *conf_file = g_key_file_new ();
-    GKeyFileFlags conffile_flags;
+    GKeyFile *conf_file = g_key_file_new();
     GError *conffile_error = NULL;
 
-    if(!g_key_file_load_from_file(conf_file, CONFPATH, conffile_flags, &conffile_error)) {
+    if(!g_key_file_load_from_file(conf_file, CONFPATH, G_KEY_FILE_NONE, &conffile_error)) {
         g_error(conffile_error->message);
     }
 
