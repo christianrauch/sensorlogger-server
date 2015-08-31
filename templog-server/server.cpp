@@ -7,6 +7,7 @@
 #include <glib.h>
 #include <unistd.h>
 #include <CommunicationService/SensorLoggerCommunicationServer.h>
+#include <error.h>
 
 #ifdef DEBUG
     #define CONFPATH "../templog.conf"
@@ -72,10 +73,12 @@ int main() {
         dbg_reader_fake(reader);
     }
     else {
+        std::cout<<"using device: "<<device<<std::endl;
         reader.setDevice(device);
     }
 
-    reader.open();
+    if(reader.open()!=0)
+        std::cout<<"error ("<<errno<<") opening OW device: "<<strerror(errno)<<std::endl;
 
     LoggerConfig conf = {.period=period, .db=&db, .reader=&reader};
 

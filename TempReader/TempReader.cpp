@@ -14,8 +14,8 @@ TempReader::~TempReader() {
     close();
 }
 
-void TempReader::open() {
-    OW_init(ow_arguments.c_str());
+ssize_t TempReader::open() {
+    return OW_init(ow_arguments.c_str());
 }
 
 void TempReader::close() {

@@ -18,7 +18,7 @@ class TempReader {
         ~TempReader();
 
         // open, close
-        void open();
+        ssize_t open();
         void close();
 
         // arguments

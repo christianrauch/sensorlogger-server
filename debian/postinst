@@ -20,6 +20,7 @@ set -e
 add_user() {
     if ! getent passwd sensorlogger > /dev/null; then
         adduser --group --system --home /var/lib/sensorlogger sensorlogger;
+        usermod -a -G dialout sensorlogger;
     fi
 }
 
