@@ -25,11 +25,8 @@ private:
 
 public:
     SensorLoggerCommunicationHandler(SensorDatabase &db, TempReader &reader){
-        std::cout<<"db Handle: "<<&db<<std::endl;
         this->db = &db;
         this->reader = &reader;
-        std::cout<<"db Handle (this): "<<this->db<<std::endl;
-        std::cout<<"reader Handle (this): "<<this->reader<<std::endl;
     }
 
     double getSensorValue(const std::string& name) {

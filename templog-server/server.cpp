@@ -63,9 +63,6 @@ int main() {
         db.init();
     }
 
-    std::cout<<"addr db: "<<&db<<std::endl;
-    std::cout<<"addr reader: "<<&reader<<std::endl;
-
     if(std::string(device)=="fake") {
         // init with example data
         std::cout<<"feeding fake data"<<std::endl;
@@ -83,9 +80,6 @@ int main() {
     LoggerConfig conf = {.period=period, .db=&db, .reader=&reader};
 
     pthread_t th_logger;
-
-    std::cout<<"addr per: "<<&period<<std::endl;
-    std::cout<<"addr conf: "<<&conf<<std::endl;
 
     //pthread_create(&th_logger, NULL, logger, (void*)period);
     pthread_create(&th_logger, NULL, logger, &conf);
